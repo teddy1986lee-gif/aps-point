@@ -44,6 +44,7 @@
 
   const CONFIG = {
     secret: 'aps-web-demo-secret',
+    demoDirectLogin: true,
     secureCookies: false,
     exposeOtp: false,
     otp: { ttlSec: 180, resendSec: 20, maxAttempts: 5, maxPerPhoneHour: 60, maxPerPhoneDay: 200, maxPerIpHour: 1000 },
@@ -196,7 +197,7 @@
     adminRoot = freshRoot(adminRoot);
     env.siteTransport = makeTransport(env.jars.site, '203.0.113.7', 'site');
     env.adminTransport = makeTransport(env.jars.admin, '198.51.100.20', 'admin');
-    env.site = window.APSSite.mount(siteRoot, { transport: env.siteTransport, routing: 'memory', onRoute: (r) => setUrl('site', r) });
+    env.site = window.APSSite.mount(siteRoot, { transport: env.siteTransport, directLogin: true, routing: 'memory', onRoute: (r) => setUrl('site', r) });
     env.admin = window.APSAdmin.mount(adminRoot, {
       transport: env.adminTransport,
       routing: 'memory',

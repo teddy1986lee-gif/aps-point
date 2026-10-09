@@ -41,6 +41,15 @@ module.exports = function routes(r, s) {
 
   r.get('/api/config', () => s.settings.publicConfig());
 
+  if (s.config.demoDirectLogin === true) {
+    r.post('/api/auth/demo-login', (ctx) => {
+      const out = s.auth.demoLogin({ name: b(ctx).name, phone: b(ctx).phone });
+      if (out.result !== 'ok') return { result: out.result };
+      ctx.setCookie(MEMBER_COOKIE, out.token, { maxAge: s.config.session.memberHours * 3600 });
+      return { result: 'ok', me: home(out.member) };
+    });
+  }
+
   r.post('/api/auth/otp', (ctx) => s.auth.requestOtp({ name: b(ctx).name, phone: b(ctx).phone, ip: ctx.ip }));
 
   r.post('/api/auth/verify', (ctx) => {

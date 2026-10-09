@@ -96,7 +96,12 @@ module.exports = function (s) {
     return db.tx(() => {
       const r = db.run('UPDATE otp_codes SET verified_at = ? WHERE id = ? AND verified_at IS NULL', at, row.id);
       if (r.changes !== 1) throw new AppError(400, 'OTP_INVALID', '이미 사용한 인증번호입니다. 다시 받아 주세요.');
-      const matched = s.members.byPhone(row.phone).filter((m) => m.name_key === row.name_key);
+      return finishMemberLogin(row.phone, row.name_key, at);
+    });
+  }
+
+  function finishMemberLogin(phone, key, at) {
+      const matched = s.members.byPhone(phone).filter((m) => m.name_key === key);
       if (!matched.length) return { result: 'no_match' };
       if (matched.length > 1) return { result: 'duplicate' };
       const m = matched[0];
@@ -113,7 +118,15 @@ module.exports = function (s) {
       );
       db.run('UPDATE members SET last_login_at = ? WHERE id = ?', at, m.id);
       return { result: 'ok', token, member: m };
-    });
+  }
+
+  // Only the browser demo opts into login without SMS verification.
+  function demoLogin({ name, phone }) {
+    if (config.demoDirectLogin !== true) throw E.unauth();
+    const nm = v.str(name, { label: '이름', field: 'name', max: 40 });
+    const ph = normalizePhone(phone);
+    if (!ph) throw E.bad('휴대폰 번호를 확인해 주세요. 예) 010-1234-5678', { field: 'phone' });
+    return db.tx(() => finishMemberLogin(ph, nameKey(nm), now()));
   }
 
   function memberSession(token) {
@@ -217,6 +230,7 @@ module.exports = function (s) {
   }
 
   return {
+    demoLogin,
     requestOtp,
     verifyOtp,
     memberSession,

@@ -334,9 +334,9 @@
               <input class="ws-input" id="ws-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" maxlength="13" value="${L.phone}" required />
             </label>
             ${L.error ? html`<p class="ws-error" role="alert">${L.error}</p>` : ''}
-            <button class="ws-btn ws-btn-wide" type="submit">인증번호 받기</button>
+            <button class="ws-btn ws-btn-wide" type="submit">${opts.directLogin ? '로그인' : '인증번호 받기'}</button>
           </form>
-          <p class="ws-privacy">입력한 이름과 휴대폰 번호는 APS 회원 확인과 포인트 조회에만 씁니다. 문자 인증은 번호의 주인인지 확인하는 절차이며 실명 확인이 아닙니다.</p>`;
+          <p class="ws-privacy">입력한 이름과 휴대폰 번호는 APS 회원 확인과 포인트 조회에만 씁니다.${opts.directLogin ? '' : ' 문자 인증은 번호의 주인인지 확인하는 절차이며 실명 확인이 아닙니다.'}</p>`;
       }
       return html`<section class="ws-login">
           <div class="ws-login-in">
@@ -359,7 +359,7 @@
             <p class="ws-eyebrow">HOW IT WORKS</p>
             <h2 id="ws-how-title">이용 방법</h2>
             <ol class="ws-steps">
-              <li><b>문자 인증 로그인</b><span>APS에 등록한 이름과 휴대폰 번호로 로그인해 포인트를 확인합니다.</span></li>
+              <li><b>${opts.directLogin ? '간편 로그인' : '문자 인증 로그인'}</b><span>APS에 등록한 이름과 휴대폰 번호로 로그인해 포인트를 확인합니다.</span></li>
               <li><b>풀팟 계정 바로 연결</b><span>풀팟 ID를 넣고 닉네임을 확인하면 그 자리에서 연결됩니다.</span></li>
               <li><b>티켓 바로 받기</b><span>장수를 고르고 신청하면 풀팟 계정으로 티켓이 즉시 지급됩니다.</span></li>
               <li><b>내역 확인</b><span>지급 번호와 사용한 포인트를 교환 내역에서 언제든 볼 수 있습니다.</span></li>
@@ -892,7 +892,26 @@
           return;
         }
         withBusy(async () => {
-          await requestOtp(name, phone);
+          if (opts.directLogin) {
+            st.login = { ...st.login, name, phone, error: null };
+            try {
+              const r = await api.post('/api/auth/demo-login', { name, phone });
+              if (r.result === 'ok') {
+                st.me = r.me;
+                st.login = freshLogin();
+                st.flash = null;
+                if (st.route === 'orders') await loadOrders().catch(() => {});
+                render();
+                notifyRoute();
+                return;
+              }
+              st.login = { ...st.login, step: 'result', result: r.result, error: null };
+            } catch (e) {
+              st.login.error = e.message;
+            }
+          } else {
+            await requestOtp(name, phone);
+          }
           render();
           focus(st.login.step === 'code' ? '#ws-code' : '#ws-phone');
         }, submitBtn);
