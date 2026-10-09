@@ -1,0 +1,11 @@
+/* 실제 페이지 전용(데모 화면에는 넣지 않음) */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+}
+#site,
+#admin {
+  min-height: 100%;
+}

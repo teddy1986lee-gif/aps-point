@@ -1,0 +1,519 @@
+/* 데모 바깥 틀: 차콜 안내 띠, 화면 고르기·체험 계정·모의 풀팟 응답, 브라우저 창 모양 틀 */
+html,
+body {
+  margin: 0;
+  background: var(--bg-soft);
+}
+.dw {
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.55;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.dw *,
+.dw *::before,
+.dw *::after {
+  box-sizing: border-box;
+}
+.dw-bar {
+  background: var(--charcoal);
+  color: var(--on-dark);
+}
+.dw-bar-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 14px 16px;
+}
+.dw-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dw-id b {
+  display: block;
+  font-size: 16px;
+}
+.dw-id span:not(.aps-mark) {
+  display: block;
+  color: var(--on-dark-muted);
+  font-size: 12.5px;
+}
+.dw-note {
+  flex: 1 1 320px;
+  margin: 0;
+  color: var(--on-dark-muted);
+  font-size: 13px;
+}
+.dw-wrap {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+}
+.dw-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.dw-btn:hover {
+  border-color: var(--ink);
+}
+.dw-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.dw-btn-dark {
+  border-color: #5b5b5b;
+  background: transparent;
+  color: var(--on-dark-2);
+}
+.dw-btn-dark:hover {
+  border-color: var(--on-dark);
+  color: var(--on-dark);
+}
+.dw-btn-primary {
+  border-color: transparent;
+  background: var(--brand);
+  color: var(--on-brand);
+}
+.dw-btn-primary:hover {
+  border-color: transparent;
+  background: var(--brand-hover);
+}
+.dw :focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.dw code {
+  padding: 1px 7px;
+  border-radius: 4px;
+  background: var(--sunken);
+  font-family: var(--font-en);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* 화면 고르기·체험 계정·모의 풀팟 */
+.dw-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 22px;
+  min-height: 74px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-radius: var(--r-md) var(--r-md) 0 0;
+  background: var(--surface);
+}
+.dw-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--r-pill);
+  background: var(--sunken);
+}
+.dw-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.dw-tabs button[aria-selected="true"] {
+  background: var(--charcoal);
+  color: var(--on-dark);
+}
+.dw-count {
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: var(--r-pill);
+  background: var(--brand);
+  color: var(--on-brand);
+  font-family: var(--font-en);
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+}
+.dw-helper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  min-width: 0;
+}
+.dw-helper[hidden] {
+  display: none;
+}
+.dw-helper-label {
+  color: var(--brand-ink);
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.dw-people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.dw-person {
+  display: inline-grid;
+  gap: 0;
+  padding: 5px 14px 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dw-person:hover {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+.dw-person b {
+  font-size: 13.5px;
+}
+.dw-person span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.dw-mock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-left: auto;
+}
+.dw-seg {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+}
+.dw-seg button {
+  min-height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.dw-seg button[aria-pressed="true"] {
+  background: var(--brand);
+  color: var(--on-brand);
+}
+.dw-seg button[data-mock="lost"][aria-pressed="true"] {
+  background: #9a5a00;
+  color: #fff;
+}
+.dw-seg button[data-mock="reject"][aria-pressed="true"] {
+  background: #c4323e;
+  color: #fff;
+}
+
+.dw-guide {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  background: var(--line);
+  list-style: none;
+  counter-reset: g;
+}
+.dw-guide li {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 13px;
+  counter-increment: g;
+}
+.dw-guide li::before {
+  content: "0" counter(g);
+  color: var(--brand-ink);
+  font-family: var(--font-en);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+.dw-guide b {
+  color: var(--ink);
+}
+
+/* 브라우저 창 모양 */
+.dw-window {
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 0 0 var(--r-md) var(--r-md);
+  background: var(--bg);
+  box-shadow: var(--shadow-1);
+}
+.dw-window[hidden] {
+  display: none;
+}
+.dw-chrome {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--sunken);
+}
+.dw-dots {
+  display: flex;
+  gap: 6px;
+}
+.dw-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.dw-url {
+  flex: 1;
+  min-width: 0;
+  max-width: 560px;
+  padding: 4px 14px;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-family: var(--font-en);
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dw-view {
+  min-height: 640px;
+}
+.dw-view > div {
+  min-height: 640px;
+}
+.dw-loading,
+.dw-error {
+  margin: 0;
+  padding: 120px 16px;
+  color: var(--muted);
+  text-align: center;
+}
+.dw-error {
+  color: var(--danger);
+}
+.dw-foot {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  text-align: center;
+}
+
+/* 휴대폰 문자 알림 */
+.dw-sms {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 200;
+  display: grid;
+  gap: 4px;
+  width: min(360px, calc(100vw - 32px));
+  padding: 12px 16px 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-2);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  animation: dw-pop 0.25s ease-out;
+}
+.dw-sms[hidden] {
+  display: none;
+}
+.dw-sms-head {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+}
+.dw-sms-head b {
+  color: var(--ink);
+}
+.dw-sms-text b {
+  font-family: var(--font-en);
+  letter-spacing: 0.06em;
+}
+.dw-sms-hint {
+  color: var(--brand-ink);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+@keyframes dw-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* 체험판 안내(회원 기록에 없는 번호로 인증 요청 등) */
+.dw-tip {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  z-index: 210;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: min(560px, calc(100vw - 32px));
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  background: var(--charcoal);
+  color: var(--on-dark);
+  box-shadow: var(--shadow-2);
+  transform: translateX(-50%);
+  font-size: 13.5px;
+  animation: dw-pop 0.25s ease-out;
+}
+.dw-tip[hidden] {
+  display: none;
+}
+.dw-tip-text {
+  flex: 1;
+}
+.dw-tip-close {
+  flex: none;
+  padding: 2px 12px;
+  border: 1px solid #5b5b5b;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--on-dark-2);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+/* 대화 상자 */
+.dw-dialog-host {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: var(--scrim);
+}
+.dw-dialog-host[hidden] {
+  display: none;
+}
+.dw-dialog {
+  width: min(100%, 520px);
+  padding: 22px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-2);
+}
+.dw-dialog h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+.dw-dialog p {
+  margin: 0 0 12px;
+  color: var(--ink-2);
+}
+.dw-dialog textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-family: var(--font-en);
+  font-size: 12.5px;
+}
+.dw-dialog-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+@media (max-width: 1100px) {
+  .dw-mock {
+    margin-left: 0;
+  }
+}
+@media (max-width: 860px) {
+  .dw-guide {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .dw-wrap {
+    padding: 12px 8px 32px;
+  }
+  .dw-bar-in {
+    padding: 12px;
+  }
+  .dw-guide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dw-tabs {
+    width: 100%;
+  }
+  .dw-tabs button {
+    flex: 1;
+    justify-content: center;
+    padding: 0 8px;
+  }
+  .dw-chrome {
+    padding: 6px 10px;
+  }
+  .dw-dots {
+    display: none;
+  }
+  .dw-sms {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dw-sms,
+  .dw-tip {
+    animation: none;
+  }
+}

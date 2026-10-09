@@ -1,0 +1,18 @@
+{
+  "name": "aps-points-web",
+  "version": "2.0.1",
+  "private": true,
+  "description": "APS 포인트 조회와 풀팟 티켓 즉시 교환 — 간편 웹 버전(회원 웹사이트 + 관리자 페이지)",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
+    "seed:demo": "node --disable-warning=ExperimentalWarning scripts/seed-demo.js",
+    "create-admin": "node --disable-warning=ExperimentalWarning scripts/create-admin.js",
+    "build:demo": "node scripts/build-demo.js",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/*.test.js\""
+  }
+}

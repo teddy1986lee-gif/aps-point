@@ -1,0 +1,176 @@
+/* APS 포인트 교환 — 공통 디자인 토큰
+   APS 공식 사이트(apokerseries.com) 톤에 맞춤:
+   흰 바탕, APS 하늘색 #2DAAE1, 네이비 #364F6B, 차콜 #212020 머리·메인 비주얼·바닥글,
+   Pretendard 본문 + Montserrat 영문 라벨·숫자, 하늘색 영문 대문자 라벨 + 한글 제목,
+   큰 외곽선 영문 장식, 둥근 알약 버튼, 모서리 10px 카드.
+   하늘색을 흰 바탕의 작은 글자에 그대로 쓰면 읽기 어려워(대비 2.6:1) 글자에는 한 단계 진한 --brand-ink를 쓴다. */
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f6f6f6;
+  --surface: #ffffff;
+  --surface-2: #f9f9f9;
+  --sunken: #f1f1f1;
+  --ink: #212020;
+  --ink-2: #4a4a4a;
+  --muted: #6b6b6b;
+  --line: #e9e9e9;
+  --line-strong: #cfcfcf;
+  --brand: #2daae1;
+  --brand-hover: #4cb9e8;
+  --brand-ink: #1679aa;
+  --brand-soft: #e8f6fc;
+  --on-brand: #0d1b22;
+  --navy: #364f6b;
+  --charcoal: #212020;
+  --charcoal-2: #2a2929;
+  --charcoal-line: #383838;
+  --on-dark: #ffffff;
+  --on-dark-2: #e3e3e3;
+  --on-dark-muted: #9e9e9e;
+  --ok: #197a42;
+  --ok-soft: #e4f4ea;
+  --info: #1679aa;
+  --info-soft: #e8f6fc;
+  --warn: #9a5a00;
+  --warn-soft: #fdf1df;
+  --danger: #c4323e;
+  --danger-soft: #fce9eb;
+  --muted-soft: #efefef;
+  --focus: #1679aa;
+  --shadow-1: 0 1px 4px rgba(0, 0, 0, 0.12);
+  --shadow-2: 0 14px 40px rgba(0, 0, 0, 0.22);
+  --shadow-head: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --scrim: rgba(0, 0, 0, 0.5);
+  --font-ui: "Pretendard Variable", Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --font-en: Montserrat, "Pretendard Variable", Pretendard, "Noto Sans KR", system-ui, sans-serif;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 20px;
+  --r-pill: 999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121212;
+    --bg-soft: #171717;
+    --surface: #1c1c1c;
+    --surface-2: #222222;
+    --sunken: #0e0e0e;
+    --ink: #ececec;
+    --ink-2: #c8c8c8;
+    --muted: #a3a3a3;
+    --line: #2f2f2f;
+    --line-strong: #474747;
+    --brand: #2daae1;
+    --brand-hover: #4cb9e8;
+    --brand-ink: #5cc3ee;
+    --brand-soft: #0f2d3b;
+    --on-brand: #0d1b22;
+    --navy: #a9c3df;
+    --charcoal: #0b0b0b;
+    --charcoal-2: #161616;
+    --charcoal-line: #2b2b2b;
+    --on-dark: #ffffff;
+    --on-dark-2: #dedede;
+    --on-dark-muted: #9a9a9a;
+    --ok: #5fd08e;
+    --ok-soft: #12301f;
+    --info: #7fc8ee;
+    --info-soft: #0f2d3b;
+    --warn: #f2a54a;
+    --warn-soft: #33240f;
+    --danger: #ff7a83;
+    --danger-soft: #3a1518;
+    --muted-soft: #262626;
+    --focus: #5cc3ee;
+    --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.6);
+    --shadow-2: 0 16px 44px rgba(0, 0, 0, 0.65);
+    --shadow-head: 0 1px 0 rgba(255, 255, 255, 0.06);
+    --scrim: rgba(0, 0, 0, 0.66);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121212;
+  --bg-soft: #171717;
+  --surface: #1c1c1c;
+  --surface-2: #222222;
+  --sunken: #0e0e0e;
+  --ink: #ececec;
+  --ink-2: #c8c8c8;
+  --muted: #a3a3a3;
+  --line: #2f2f2f;
+  --line-strong: #474747;
+  --brand: #2daae1;
+  --brand-hover: #4cb9e8;
+  --brand-ink: #5cc3ee;
+  --brand-soft: #0f2d3b;
+  --on-brand: #0d1b22;
+  --navy: #a9c3df;
+  --charcoal: #0b0b0b;
+  --charcoal-2: #161616;
+  --charcoal-line: #2b2b2b;
+  --on-dark: #ffffff;
+  --on-dark-2: #dedede;
+  --on-dark-muted: #9a9a9a;
+  --ok: #5fd08e;
+  --ok-soft: #12301f;
+  --info: #7fc8ee;
+  --info-soft: #0f2d3b;
+  --warn: #f2a54a;
+  --warn-soft: #33240f;
+  --danger: #ff7a83;
+  --danger-soft: #3a1518;
+  --muted-soft: #262626;
+  --focus: #5cc3ee;
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --shadow-2: 0 16px 44px rgba(0, 0, 0, 0.65);
+  --shadow-head: 0 1px 0 rgba(255, 255, 255, 0.06);
+  --scrim: rgba(0, 0, 0, 0.66);
+  color-scheme: dark;
+}
+
+/* 공통 부품: 상태 칩, APS 글자 표시 */
+.tone-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 10px 3px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+  background: var(--muted-soft);
+  color: var(--ink-2);
+}
+.tone-chip::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.85;
+}
+.tone-chip[data-tone="ok"] { background: var(--ok-soft); color: var(--ok); }
+.tone-chip[data-tone="info"] { background: var(--info-soft); color: var(--info); }
+.tone-chip[data-tone="warn"] { background: var(--warn-soft); color: var(--warn); }
+.tone-chip[data-tone="danger"] { background: var(--danger-soft); color: var(--danger); }
+.tone-chip[data-tone="muted"] { background: var(--muted-soft); color: var(--muted); }
+
+/* 서비스 표시: 하늘색 바탕에 APS 세 글자(공식 로고 이미지는 쓰지 않음) */
+.aps-mark {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 5px;
+  background: var(--brand);
+  color: var(--on-brand);
+  font-family: var(--font-en);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}

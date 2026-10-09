@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#212020">
+<title>APS 포인트 교환 웹 데모</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap">
+<style>
+/*__STYLES__*/
+</style>
+</head>
+<body>
+<div class="dw" id="dw">
+  <header class="dw-bar">
+    <div class="dw-bar-in">
+      <div class="dw-id">
+        <span class="aps-mark" aria-hidden="true">APS</span>
+        <div><b>APS 포인트 교환</b><span>간편 웹 버전 체험판 · 회원 웹사이트와 관리자 페이지</span></div>
+      </div>
+      <p class="dw-note">서버 코드가 이 브라우저 안에서 그대로 돌아가는 체험판입니다. 회원·연락처·풀팟 계정은 모두 예시이고, 실제 문자나 티켓은 나가지 않습니다. 바꾼 내용은 이 브라우저에만 남습니다.</p>
+      <button type="button" class="dw-btn dw-btn-dark" data-demo="reset">처음 상태로</button>
+    </div>
+  </header>
+
+  <div class="dw-wrap">
+    <div class="dw-controls">
+      <div class="dw-tabs" role="tablist" aria-label="보는 화면">
+        <button type="button" role="tab" id="dw-tab-site" aria-selected="true" aria-controls="dw-pane-site" data-pane="site">회원 웹사이트</button>
+        <button type="button" role="tab" id="dw-tab-admin" aria-selected="false" aria-controls="dw-pane-admin" data-pane="admin">관리자 페이지<span class="dw-count" data-count hidden></span></button>
+      </div>
+      <div class="dw-helper" data-helper="site">
+        <span class="dw-helper-label">체험 회원</span>
+        <div class="dw-people" id="dw-people"></div>
+      </div>
+      <div class="dw-helper" data-helper="admin" hidden>
+        <span class="dw-helper-label">관리자 계정</span>
+        <span>아이디 <code>admin</code> · 비밀번호 <code>demo-pass-2026</code></span>
+        <button type="button" class="dw-btn dw-btn-primary" data-demo="admin-login">자동으로 로그인</button>
+      </div>
+      <div class="dw-mock" role="group" aria-labelledby="dw-mock-label">
+        <span class="dw-helper-label" id="dw-mock-label">모의 풀팟 응답</span>
+        <div class="dw-seg">
+          <button type="button" data-mock="ok" aria-pressed="true">정상 지급</button>
+          <button type="button" data-mock="lost" aria-pressed="false" title="풀팟은 지급했지만 응답이 오지 않는 경우">응답 없음</button>
+          <button type="button" data-mock="reject" aria-pressed="false" title="풀팟이 지급을 거절하는 경우">지급 거절</button>
+        </div>
+      </div>
+    </div>
+
+    <ol class="dw-guide" aria-label="체험 순서">
+      <li><span><b>김민준</b>으로 로그인해 풀팟 계정에 <code>minjun_k</code>를 넣으면 승인 없이 바로 연결됩니다.</span></li>
+      <li><span>티켓 교환에서 2장을 받으면 그 자리에서 <b>지급 완료</b>가 되고 포인트가 차감됩니다.</span></li>
+      <li><span>모의 풀팟을 <b>응답 없음</b>으로 바꾸고 1장 더 받으면 '지급 확인 중'이 됩니다. 관리자 티켓 지급에서 <b>풀팟에서 확인</b>을 누르세요.</span></li>
+      <li><span>관리자 포인트 등록 → <b>직접 등록</b>에서 이름·휴대폰으로 회원을 만들고 포인트를 넣어 봅니다.</span></li>
+    </ol>
+
+    <section class="dw-window" id="dw-pane-site" role="tabpanel" aria-labelledby="dw-tab-site">
+      <div class="dw-chrome" aria-hidden="true"><span class="dw-dots"><i></i><i></i><i></i></span><span class="dw-url" data-url="site">aps-points.example/</span></div>
+      <div class="dw-view"><div id="dw-site"><p class="dw-loading">데모 서버를 준비하는 중</p></div></div>
+    </section>
+    <section class="dw-window" id="dw-pane-admin" role="tabpanel" aria-labelledby="dw-tab-admin" hidden>
+      <div class="dw-chrome" aria-hidden="true"><span class="dw-dots"><i></i><i></i><i></i></span><span class="dw-url" data-url="admin">aps-points.example/admin/</span></div>
+      <div class="dw-view"><div id="dw-admin"><p class="dw-loading">데모 서버를 준비하는 중</p></div></div>
+    </section>
+    <p class="dw-foot">예시 데이터로 만든 체험판입니다. 실제 서비스와 연결되어 있지 않습니다.</p>
+  </div>
+
+  <button type="button" class="dw-sms" data-demo="sms-fill" hidden>
+    <span class="dw-sms-head"><b>문자 메시지</b><span>지금</span></span>
+    <span class="dw-sms-text"></span>
+    <span class="dw-sms-hint">눌러서 인증번호 입력</span>
+  </button>
+  <div class="dw-tip" role="status" hidden>
+    <span class="dw-tip-text"></span>
+    <button type="button" class="dw-tip-close" data-demo="tip-close" aria-label="안내 닫기">닫기</button>
+  </div>
+  <div class="dw-dialog-host" hidden></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sql.js@1.13.0/dist/sql-asm.js"></script>
+<!--__SCRIPTS__-->
+</body>
+</html>
