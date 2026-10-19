@@ -59,6 +59,32 @@ details.card[open] summary{margin-bottom:8px}
 .sample button span{display:block;font-weight:400;font-size:12px;color:#64748b;margin-top:2px}
 .hint{font-size:13px;color:#64748b;margin-top:10px}
 footer{text-align:center;color:#8190a0;margin:30px 0;font-size:12px}
+/* 로그인 */
+.auth{max-width:440px;margin:10px auto 0}
+.brand{text-align:center;margin:8px 0 22px}
+.brand .logo{width:56px;height:56px;border-radius:16px;margin:0 auto 12px;background:linear-gradient(135deg,#10233d,#14809a);display:grid;place-items:center;color:#55e0e6;font-weight:900;font-size:20px;letter-spacing:-1px}
+.brand h1{margin:0;font-size:24px}
+.brand p{margin:4px 0 0;color:#64748b;font-size:14px}
+.seg{display:flex;background:#e5ecf3;border-radius:12px;padding:4px;margin-bottom:16px}
+.seg button{flex:1;margin:0;padding:10px;background:transparent;color:#52627a;border-radius:9px}
+.seg button.on{background:#fff;color:#10233d;box-shadow:0 1px 4px #10233d22}
+.auth .card{padding:24px}
+.auth button.full{width:100%}
+.field{position:relative}
+.field .side{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700;color:#c2414b}
+.otp{letter-spacing:10px;font-size:22px;font-weight:800;text-align:center}
+.row2{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;font-size:13px;color:#64748b}
+.linkbtn{background:none;color:#0d748b;padding:0;margin:0;font-weight:700;font-size:13px}
+.linkbtn:disabled{color:#94a3b8}
+.check{display:flex;align-items:center;gap:8px;font-weight:500;margin:14px 0 0;font-size:14px}
+.check input{width:18px;height:18px;margin:0}
+.sent{background:#f1f7fb;border-radius:10px;padding:10px 12px;font-size:13px;color:#33506b;margin-bottom:4px}
+.sms{position:fixed;top:12px;left:50%;transform:translateX(-50%);width:min(380px,calc(100% - 24px));background:#1f2937f2;color:#fff;border-radius:16px;padding:12px 14px;z-index:60;box-shadow:0 12px 30px #0005;animation:drop .35s ease-out}
+.sms .top{display:flex;justify-content:space-between;font-size:12px;color:#cbd5e1;margin-bottom:4px}
+.sms b{color:#7dd3fc}
+.sms button{margin:8px 0 0;padding:6px 12px;font-size:13px;background:#0ea5b7}
+@keyframes drop{from{transform:translate(-50%,-30px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+.help{font-size:13px;color:#64748b;text-align:center;margin-top:14px}
 /* 지급 진행 화면 */
 .overlay{position:fixed;inset:0;background:#0b1a2ccc;display:grid;place-items:center;padding:16px;z-index:50}
 .modal{background:#fff;border-radius:18px;width:min(480px,100%);padding:24px;box-shadow:0 20px 50px #0006}
@@ -90,6 +116,7 @@ footer{text-align:center;color:#8190a0;margin:30px 0;font-size:12px}
   <footer>APS 포인트 체험판 · 이 브라우저에만 저장됩니다 · 풀팟 지급은 모의(가짜) 처리입니다</footer>
 </main>
 <div id="flow"></div>
+<div id="sms"></div>
 <script>
 'use strict';
 const KEY = 'aps-index-ticket-demo-v1';
@@ -179,7 +206,9 @@ function blockReason(m) {
 function statusClass(s) { return s === '지급 완료' ? 'ok' : s === '실패' ? 'fail' : 'wait'; }
 
 /* ───── 화면 ───── */
-let uid = sessionStorage.getItem(SESSION_KEY) || '';
+const KEEP_KEY = 'aps-member-keep';   // '로그인 상태 유지'를 고르면 브라우저를 닫아도 유지
+let uid = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(KEEP_KEY) || '';
+function clearSession() { sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem(KEEP_KEY); }
 let gain = null;   // 방금 늘어난 풀팟 티켓 표시용 { id, n }
 
 function scenarioButtons(fn) {
@@ -188,16 +217,116 @@ function scenarioButtons(fn) {
     (s.tag ? '<em class="' + (s.tc || '') + '">' + s.tag + '</em>' : '') + '<span>' + s.d + '</span></button>').join('') + '</div>';
 }
 
+let loginTab = 'member';
+// 문자 인증 상태(가짜): 실제 문자는 보내지 않고 화면 위에 문자 알림처럼 보여 줍니다.
+const OTP_TTL = 180, OTP_RESEND = 60, OTP_TRIES = 5;
+let otp = null;      // { uid, name, phone, code, exp, resendAt, tries }
+let otpTick = null;
+
+function maskPhone(p) { const d = digits(p); return d.length >= 10 ? d.slice(0, 3) + '-****-' + d.slice(-4) : p; }
+function mmss(sec) { sec = Math.max(0, sec); return String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0'); }
+
 function loginView() {
-  return '<div class="card"><h2>시나리오로 바로 로그인</h2>' +
-    '<p class="muted">테스트할 상황을 고르면 체험 회원(김서연)이 그 상태로 준비된 뒤 바로 로그인됩니다.</p>' +
-    scenarioButtons('loginScenario') + '</div>' +
-    '<div class="card"><h2>이름·휴대폰으로 로그인</h2>' +
-    '<form onsubmit="login(event)">' +
-    '<label for="name">이름</label><input id="name" autocomplete="name" placeholder="이름">' +
-    '<label for="phone">휴대폰 번호</label><input id="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000">' +
-    '<button type="submit">로그인</button></form>' +
-    '<p class="hint">예시 회원: 김서연 010-2481-1024 · 박도윤 010-3917-1025 · 이하은 010-5530-1026 · 최민준 010-7042-1027</p></div>';
+  let h = '<div class="auth"><div class="brand"><div class="logo">APS</div><h1>' + esc(db.settings.site) + '</h1><p>인덱스포인트로 풀팟 티켓을 교환하세요</p></div>' +
+    '<div class="seg" role="tablist"><button role="tab" class="' + (loginTab === 'member' ? 'on' : '') + '" onclick="setLoginTab(\'member\')">회원 로그인</button>' +
+    '<button role="tab" class="' + (loginTab === 'scenario' ? 'on' : '') + '" onclick="setLoginTab(\'scenario\')">체험 시나리오</button></div>';
+  if (loginTab === 'scenario') {
+    return h + '<div class="card"><h2>시나리오로 바로 로그인</h2><p class="muted">테스트할 상황을 고르면 체험 회원(김서연)이 그 상태로 준비된 뒤 문자 인증 없이 바로 로그인됩니다.</p>' +
+      '<div class="sample" style="grid-template-columns:1fr">' + scenarioButtons('loginScenario').replace(/^<div class="sample">|<\/div>$/g, '') + '</div></div></div>';
+  }
+  if (!otp) {
+    h += '<div class="card"><h2>휴대폰 번호로 로그인</h2><p class="muted">APS 매장에 등록한 이름과 휴대폰 번호를 입력하면 인증번호를 문자로 보내 드립니다.</p>' +
+      '<form onsubmit="requestOtp(event)" novalidate>' +
+      '<label for="name">이름</label><input id="name" autocomplete="name" placeholder="홍길동" maxlength="20">' +
+      '<label for="phone">휴대폰 번호</label><input id="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" maxlength="13" oninput="this.value=formatPhone(this.value)">' +
+      '<button type="submit" class="full">인증번호 받기</button></form>' +
+      '<p class="help">예시 회원: 김서연 010-2481-1024 · 최민준 010-7042-1027</p></div>';
+  } else {
+    const left = Math.round((otp.exp - Date.now()) / 1000), wait = Math.round((otp.resendAt - Date.now()) / 1000);
+    h += '<div class="card"><h2>인증번호 입력</h2>' +
+      '<div class="sent">' + esc(otp.name) + '님 · <b>' + esc(maskPhone(otp.phone)) + '</b>로 인증번호 6자리를 보냈습니다.</div>' +
+      '<form onsubmit="verifyOtp(event)" novalidate>' +
+      '<label for="code">인증번호</label><div class="field"><input id="code" class="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="······" oninput="this.value=this.value.replace(/\\D/g,\'\').slice(0,6); if(this.value.length===6) verifyOtp()">' +
+      '<span class="side" id="otpTimer">' + mmss(left) + '</span></div>' +
+      '<div class="row2"><span id="otpTries">남은 입력 횟수 ' + (OTP_TRIES - otp.tries) + '회</span>' +
+      '<button type="button" class="linkbtn" id="resendBtn" onclick="resendOtp()" ' + (wait > 0 ? 'disabled' : '') + '>' + (wait > 0 ? wait + '초 후 재전송' : '인증번호 재전송') + '</button></div>' +
+      '<label class="check"><input type="checkbox" id="keep"> 로그인 상태 유지</label>' +
+      '<button type="submit" class="full">로그인</button>' +
+      '<button type="button" class="secondary full" onclick="cancelOtp()">번호 다시 입력</button></form>' +
+      '<p class="help">문자가 오지 않나요? 체험판은 실제 문자를 보내지 않고 화면 위에 보여 줍니다.</p></div>';
+  }
+  return h + '</div>';
+}
+function setLoginTab(t) { loginTab = t; view(); }
+function formatPhone(v) {
+  const d = digits(v).slice(0, 11);
+  if (d.length < 4) return d;
+  if (d.length < 8) return d.slice(0, 3) + '-' + d.slice(3);
+  return d.slice(0, 3) + '-' + d.slice(3, d.length - 4) + '-' + d.slice(-4);
+}
+function sendSms() {
+  otp.code = String(Math.floor(100000 + Math.random() * 900000));
+  otp.exp = Date.now() + OTP_TTL * 1000;
+  otp.resendAt = Date.now() + OTP_RESEND * 1000;
+  otp.tries = 0;
+  $('sms').innerHTML = '<div class="sms" role="alert"><div class="top"><span>메시지 · APS</span><span>지금</span></div>' +
+    '[APS 포인트] 인증번호 <b>' + otp.code + '</b> 를 입력해 주세요. (3분 이내)<br>' +
+    '<button type="button" onclick="fillOtp()">인증번호 자동 입력</button></div>';
+  clearTimeout(sendSms.t);
+  sendSms.t = setTimeout(() => { $('sms').innerHTML = ''; }, 12000);
+}
+function fillOtp() { const c = $('code'); if (c && otp) { c.value = otp.code; $('sms').innerHTML = ''; verifyOtp(); } }
+function startTick() {
+  clearInterval(otpTick);
+  otpTick = setInterval(() => {
+    if (!otp) return clearInterval(otpTick);
+    const left = Math.round((otp.exp - Date.now()) / 1000), wait = Math.round((otp.resendAt - Date.now()) / 1000);
+    const t = $('otpTimer'), b = $('resendBtn');
+    if (t) t.textContent = left > 0 ? mmss(left) : '시간 초과';
+    if (b) { b.disabled = wait > 0; b.textContent = wait > 0 ? wait + '초 후 재전송' : '인증번호 재전송'; }
+  }, 500);
+}
+function requestOtp(e) {
+  e.preventDefault();
+  fresh();
+  const n = $('name').value.trim(), p = digits($('phone').value);
+  if (!n) return msg('이름을 입력해 주세요.', 'error');
+  if (!/^01\d{8,9}$/.test(p)) return msg('휴대폰 번호를 정확히 입력해 주세요. (예: 010-1234-5678)', 'error');
+  const m = db.users.find(x => x.name === n && digits(x.phone) === p);
+  if (!m) return msg('등록된 회원 정보와 일치하지 않습니다. 이름과 번호를 확인하거나 APS 매장에서 회원 등록 후 이용해 주세요.', 'error');
+  otp = { uid: m.id, name: m.name, phone: m.phone };
+  sendSms();
+  view();
+  startTick();
+  $('msg').innerHTML = '';
+  setTimeout(() => $('code') && $('code').focus(), 50);
+}
+function resendOtp() {
+  if (!otp || Date.now() < otp.resendAt) return;
+  sendSms();
+  view();
+  startTick();
+  $('msg').innerHTML = '';
+}
+function cancelOtp() { otp = null; clearInterval(otpTick); $('sms').innerHTML = ''; view(); }
+function verifyOtp(e) {
+  if (e) e.preventDefault();
+  if (!otp) return view();
+  const c = $('code').value.trim();
+  if (Date.now() > otp.exp) return msg('인증 시간이 지났습니다. 인증번호를 다시 받아 주세요.', 'error');
+  if (otp.tries >= OTP_TRIES) return msg('입력 횟수를 넘었습니다. 인증번호를 다시 받아 주세요.', 'error');
+  if (c.length !== 6) return msg('인증번호 6자리를 입력해 주세요.', 'error');
+  if (c !== otp.code) {
+    otp.tries++;
+    $('code').value = '';
+    $('otpTries').textContent = '남은 입력 횟수 ' + (OTP_TRIES - otp.tries) + '회';
+    return msg(otp.tries >= OTP_TRIES ? '입력 횟수를 넘었습니다. 인증번호를 다시 받아 주세요.' : '인증번호가 맞지 않습니다. (남은 횟수 ' + (OTP_TRIES - otp.tries) + '회)', 'error');
+  }
+  fresh();
+  const m = user(otp.uid), keep = $('keep') && $('keep').checked;
+  otp = null; clearInterval(otpTick); $('sms').innerHTML = '';
+  if (!m) return msg('회원 정보를 찾을 수 없습니다.', 'error'), view();
+  startSession(m, m.name + '님, 반갑습니다.', keep);
 }
 
 function memberView(m) {
@@ -266,7 +395,7 @@ function historyList(id) {
 
 function view() {
   const m = user(uid);
-  if (uid && !m) { uid = ''; sessionStorage.removeItem(SESSION_KEY); }
+  if (uid && !m) { uid = ''; clearSession(); }
   $('app').innerHTML = m ? memberView(m) : loginView();
   if (m) updateCost();
 }
@@ -281,21 +410,14 @@ function updateCost() {
 }
 
 /* ───── 로그인 ───── */
-function startSession(m, text) {
+function startSession(m, text, keep = false) {
   uid = m.id;
+  clearSession();
   sessionStorage.setItem(SESSION_KEY, uid);
+  if (keep) localStorage.setItem(KEEP_KEY, uid);
   msg(text);
   view();
   window.scrollTo(0, 0);
-}
-function login(e) {
-  e.preventDefault();
-  fresh();
-  const n = $('name').value.trim(), p = digits($('phone').value);
-  if (!n || !p) return msg('이름과 휴대폰 번호를 입력해 주세요.', 'error');
-  const m = db.users.find(x => x.name === n && digits(x.phone) === p);
-  if (!m) return msg('일치하는 회원이 없습니다. 이름과 휴대폰 번호를 확인해 주세요.', 'error');
-  startSession(m, m.name + '님, 로그인했습니다.');
 }
 function loginScenario(k) {
   fresh();
@@ -308,7 +430,8 @@ function loginScenario(k) {
 }
 function logout() {
   uid = '';
-  sessionStorage.removeItem(SESSION_KEY);
+  clearSession();
+  loginTab = 'member';
   msg('로그아웃했습니다.');
   view();
 }
