@@ -17,11 +17,17 @@ header a{color:#d6e8ff;text-decoration:none;font-size:14px}
 .hero{background:linear-gradient(115deg,#102c48,#146a85);color:#fff;padding:30px;border-radius:20px;margin-bottom:18px}
 .hero h1{margin:4px 0;font-size:28px}
 .hero p{opacity:.85;margin:0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
 .card{background:#fff;border:1px solid #e1e8f0;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 4px 14px #182c4610}
 .grid>.card{margin-bottom:0}
 .grid+.card,.grid+.alert{margin-top:18px}
-.metric{font-size:36px;font-weight:800;margin:6px 0;color:#0a7186}
+.metric{font-size:34px;font-weight:800;margin:6px 0;color:#0a7186}
+.card.fulpot{background:linear-gradient(160deg,#1b1530,#2d1f4f);color:#fff;border:0}
+.card.fulpot .metric{color:#ffd166}
+.card.fulpot .muted,.card.fulpot small{color:#c9bfe6}
+.card.fulpot .tag{display:inline-block;font-size:11px;font-weight:700;background:#ffffff22;border-radius:6px;padding:1px 7px;margin-left:6px}
+.bump{display:inline-block;margin-left:8px;font-size:16px;font-weight:800;color:#7cf0b0;animation:pop 1.6s ease-out}
+@keyframes pop{0%{transform:translateY(8px);opacity:0}25%{transform:none;opacity:1}100%{opacity:1}}
 .muted{color:#64748b;font-size:13px}
 h2{font-size:19px;margin:0 0 12px}
 label{display:block;margin:12px 0 5px;font-weight:600}
@@ -30,7 +36,6 @@ input:disabled{background:#f1f5f9;color:#94a3b8}
 button{cursor:pointer;border:0;border-radius:10px;background:#0d748b;color:#fff;font:inherit;font-weight:700;padding:12px 20px;margin-top:12px}
 button.secondary{background:#e7eff6;color:#17243b}
 button:disabled{opacity:.45;cursor:not-allowed}
-.btnrow{display:flex;gap:8px;flex-wrap:wrap}
 .alert{padding:12px 14px;background:#e8f4fa;border-radius:10px;color:#14576b;margin:0 0 14px;box-shadow:0 2px 8px #182c4614}
 .alert.error{background:#fff0ed;color:#ac342c}
 .alert.warn{background:#fff6e5;color:#8a5a12}
@@ -38,17 +43,43 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .list li{border-bottom:1px solid #e5ebf2;padding:12px 0}
 .list li:last-child{border-bottom:0}
 .pill{display:inline-block;padding:2px 9px;background:#eef3f7;border-radius:20px;font-size:12px;font-weight:700}
-.pill.minus{background:#fdeeee;color:#a3343d}
-.pill.plus{background:#e6f6ef;color:#167049}
+.pill.minus,.pill.fail{background:#fdeeee;color:#a3343d}
+.pill.plus,.pill.ok{background:#e6f6ef;color:#167049}
+.pill.wait{background:#fff1dd;color:#a26816}
 .cost{font-weight:700;color:#0a7186}
 small{color:#6e8296}
 details.card summary{cursor:pointer;font-weight:700;font-size:16px}
 details.card[open] summary{margin-bottom:8px}
-.sample{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:6px}
-.sample button{margin:0;text-align:left;font-weight:600}
-.sample button span{display:block;font-weight:400;font-size:12px;color:#64748b}
+.sample{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:6px}
+.sample button{margin:0;text-align:left;font-weight:700;padding:14px 16px;background:#eef4f9;color:#17243b;border:1px solid #dbe5ee}
+.sample button:hover{border-color:#0d748b}
+.sample button em{font-style:normal;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px;margin-left:6px;background:#dff1f5;color:#0a6176}
+.sample button em.warn{background:#fff1dd;color:#a26816}
+.sample button em.bad{background:#fdeeee;color:#a3343d}
+.sample button span{display:block;font-weight:400;font-size:12px;color:#64748b;margin-top:2px}
+.hint{font-size:13px;color:#64748b;margin-top:10px}
 footer{text-align:center;color:#8190a0;margin:30px 0;font-size:12px}
-@media(max-width:600px){.hero{padding:22px}.hero h1{font-size:23px}.metric{font-size:30px}}
+/* 지급 진행 화면 */
+.overlay{position:fixed;inset:0;background:#0b1a2ccc;display:grid;place-items:center;padding:16px;z-index:50}
+.modal{background:#fff;border-radius:18px;width:min(480px,100%);padding:24px;box-shadow:0 20px 50px #0006}
+.modal h2{margin-bottom:4px}
+.steps{list-style:none;padding:0;margin:18px 0 6px}
+.steps li{display:flex;gap:12px;padding:10px 0;align-items:flex-start;color:#94a3b8}
+.steps li .ic{flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;background:#eef2f6;color:#94a3b8}
+.steps li b{display:block;font-weight:700}
+.steps li small{display:block;font-size:12px}
+.steps li.run,.steps li.done,.steps li.fail,.steps li.warn{color:#17243b}
+.steps li.run .ic{background:#fff;border:3px solid #cfe6ec;border-top-color:#0d748b;animation:spin .8s linear infinite;color:transparent}
+.steps li.done .ic{background:#0d9468;color:#fff}
+.steps li.fail .ic{background:#c2414b;color:#fff}
+.steps li.warn .ic{background:#e2a03a;color:#fff}
+.steps li.skip{opacity:.6}
+@keyframes spin{to{transform:rotate(360deg)}}
+.result{border-radius:12px;padding:14px;margin-top:10px;font-size:14px}
+.result.ok{background:#e6f6ef;color:#145c3d}
+.result.warn{background:#fff6e5;color:#7a4f10}
+.result.fail{background:#fdeeee;color:#8e2b33}
+@media(max-width:600px){.hero{padding:22px}.hero h1{font-size:23px}.metric{font-size:28px}}
 </style>
 </head>
 <body>
@@ -56,13 +87,14 @@ footer{text-align:center;color:#8190a0;margin:30px 0;font-size:12px}
 <main class="wrap">
   <div id="msg" role="status" aria-live="polite"></div>
   <div id="app"></div>
-  <footer>APS 포인트 체험판 · 이 브라우저에만 저장됩니다 · 실제 티켓 지급 기능 없음</footer>
+  <footer>APS 포인트 체험판 · 이 브라우저에만 저장됩니다 · 풀팟 지급은 모의(가짜) 처리입니다</footer>
 </main>
+<div id="flow"></div>
 <script>
 'use strict';
 const KEY = 'aps-index-ticket-demo-v1';
 const SESSION_KEY = 'aps-member';
-const DEFAULTS = { ratio: 40, max: 5, opened: true, ticket: '풀팟 토너먼트 티켓', site: 'APS 포인트 교환', notice: '교환 신청 후 지급 결과를 확인해 주세요.' };
+const DEFAULTS = { ratio: 40, max: 5, opened: true, ticket: '풀팟 토너먼트 티켓', site: 'APS 포인트 교환', notice: '교환 신청 후 지급 결과를 확인해 주세요.', fulpotMode: 'ok' };
 // 관리자 화면(admin.html)의 예시 회원과 같은 값이어야 합니다.
 const EXAMPLES = [
   { id: 'U-1024', name: '김서연', phone: '010-2481-1024', ip: 120, fp: 'FP-20481', fpNick: '리버킹' },
@@ -70,6 +102,19 @@ const EXAMPLES = [
   { id: 'U-1026', name: '이하은', phone: '010-5530-1026', ip: 0, fp: 'FP-55302', fpNick: '하은' },
   { id: 'U-1027', name: '최민준', phone: '010-7042-1027', ip: 80, fp: '' }
 ];
+// 로그인 화면·회원 화면에서 고르는 테스트 상황
+const SCENARIOS = [
+  { k: 'normal', t: '정상 교환', d: '120 IP · 계정 등록 → 교환하면 풀팟 티켓이 늘어남' },
+  { k: 'delay', t: '풀팟 응답 지연', tag: '확인 필요', tc: 'warn', d: '교환 시 응답 없음 → 관리자가 지급 확인' },
+  { k: 'reject', t: '풀팟 지급 거절', tag: '자동 환불', tc: 'bad', d: '교환 시 거절 → 차감한 IP 돌려받음' },
+  { k: 'empty', t: '포인트 부족', d: '10 IP · 교환 불가' },
+  { k: 'unregistered', t: '풀팟 계정 미등록', d: '120 IP · 계정 등록부터' },
+  { k: 'maximum', t: '다량 보유', d: '400 IP · 1회 최대 장수 제한' },
+  { k: 'history', t: '교환 완료 내역', d: '이전 교환 1건 · 풀팟 티켓 1장 보유' },
+  { k: 'closed', t: '교환 일시 중지', tc: 'warn', d: '관리자가 교환을 닫은 상태' },
+  { k: 'suspended', t: '이용 중지 계정', tc: 'bad', d: '조회만 가능' }
+];
+const MODE_TEXT = { ok: '정상 지급', delay: '응답 지연', reject: '지급 거절' };
 
 /* ───── 데이터 ───── */
 function initial() { return { users: EXAMPLES.map(x => ({ ...x })), logs: [], requests: [], seq: 1 }; }
@@ -80,9 +125,14 @@ function normalize(d) {
   d.users.forEach(u => {
     u.held ??= 0;
     u.status ??= '정상';
-    // 예전에 저장된 예시 회원에는 닉네임이 없어 '미등록'으로 보이던 문제 보정
+    u.fpTickets ??= 0;
     const ex = EXAMPLES.find(x => x.id === u.id);
     if (!u.fpNick && ex && ex.fpNick && u.fp === ex.fp) u.fpNick = ex.fpNick;
+  });
+  d.requests.forEach(r => {
+    if (r.status === '체험 지급 완료' || r.status === '완료') r.status = '지급 완료';
+    // 진행 화면 도중 창을 닫으면 결과를 모르는 상태로 남깁니다.
+    if (r.status === '처리 중' && Date.now() - (r.ts || 0) > 60000) r.status = '확인 필요';
   });
   return d;
 }
@@ -107,6 +157,8 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': 
 const fmt = n => Number(n || 0).toLocaleString('ko-KR');
 const now = () => new Date().toLocaleString('ko-KR');
 const digits = s => String(s || '').replace(/\D/g, '');
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const txNo = () => 'FPTX-' + String(Date.now()).slice(-8);
 let msgTimer;
 function msg(text, kind = '') {
   clearTimeout(msgTimer);
@@ -124,48 +176,69 @@ function blockReason(m) {
   if (available(m) < ratio()) return '티켓 1장 교환에 ' + fmt(ratio()) + ' IP가 필요합니다. (사용 가능 ' + fmt(available(m)) + ' IP)';
   return '';
 }
+function statusClass(s) { return s === '지급 완료' ? 'ok' : s === '실패' ? 'fail' : 'wait'; }
 
 /* ───── 화면 ───── */
 let uid = sessionStorage.getItem(SESSION_KEY) || '';
+let gain = null;   // 방금 늘어난 풀팟 티켓 표시용 { id, n }
+
+function scenarioButtons(fn) {
+  return '<div class="sample">' + SCENARIOS.map(s =>
+    '<button type="button" onclick="' + fn + '(\'' + s.k + '\')">' + s.t +
+    (s.tag ? '<em class="' + (s.tc || '') + '">' + s.tag + '</em>' : '') + '<span>' + s.d + '</span></button>').join('') + '</div>';
+}
 
 function loginView() {
-  return '<div class="card"><h2>회원 로그인</h2>' +
-    '<p class="muted">체험판입니다. 이름과 휴대폰 번호로 로그인합니다.</p>' +
+  return '<div class="card"><h2>시나리오로 바로 로그인</h2>' +
+    '<p class="muted">테스트할 상황을 고르면 체험 회원(김서연)이 그 상태로 준비된 뒤 바로 로그인됩니다.</p>' +
+    scenarioButtons('loginScenario') + '</div>' +
+    '<div class="card"><h2>이름·휴대폰으로 로그인</h2>' +
     '<form onsubmit="login(event)">' +
     '<label for="name">이름</label><input id="name" autocomplete="name" placeholder="이름">' +
     '<label for="phone">휴대폰 번호</label><input id="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000">' +
-    '<button type="submit">로그인</button></form></div>' +
-    '<div class="card"><h2>체험 회원으로 바로 로그인</h2><p class="muted">상황이 다른 예시 회원입니다.</p><div class="sample">' +
-    db.users.filter(u => EXAMPLES.some(x => x.id === u.id)).map(u =>
-      '<button type="button" class="secondary" onclick="loginAs(\'' + esc(u.id) + '\')">' + esc(u.name) +
-      '<span>' + fmt(u.ip) + ' IP · ' + (u.fp && u.fpNick ? '풀팟 계정 등록' : '풀팟 계정 미등록') + '</span></button>'
-    ).join('') + '</div></div>';
+    '<button type="submit">로그인</button></form>' +
+    '<p class="hint">예시 회원: 김서연 010-2481-1024 · 박도윤 010-3917-1025 · 이하은 010-5530-1026 · 최민준 010-7042-1027</p></div>';
 }
 
 function memberView(m) {
   const s = db.settings, r = ratio(), avail = available(m), mq = maxQty(m), reason = blockReason(m);
   const stopped = m.status === '이용 중지';
+  const mine = db.requests.filter(x => x.id === m.id).slice().reverse();
+  const pend = mine.filter(x => x.status === '확인 필요' || x.status === '처리 중');
   let h = '';
   if (stopped) h += '<div class="alert error">이용이 중지된 계정입니다. 포인트 조회만 가능합니다.</div>';
   else if (s.opened === false) h += '<div class="alert warn">현재 티켓 교환이 일시 중지되어 있습니다. 잠시 후 다시 이용해 주세요.</div>';
+  if (pend.length) h += '<div class="alert warn">풀팟 지급 결과를 확인 중인 신청이 ' + pend.length + '건 있습니다. 확인되면 풀팟 계정에 티켓이 들어갑니다.</div>';
 
   h += '<div class="hero"><p>' + esc(s.site) + '</p><h1>' + esc(m.name) + '님의 포인트</h1><p>인덱스포인트(IP)로 ' + esc(s.ticket) + '을 교환하세요</p></div>';
 
+  const g = gain && gain.id === m.id ? gain.n : 0;
   h += '<div class="grid">' +
     '<div class="card"><div>사용 가능 인덱스포인트</div><div class="metric">' + fmt(avail) + ' <small>IP</small></div>' +
-    (m.held ? '<div class="muted">보유 ' + fmt(m.ip) + ' IP 중 ' + fmt(m.held) + ' IP 처리 대기</div>' : '') + '</div>' +
+    (m.held ? '<div class="muted">보유 ' + fmt(m.ip) + ' IP 중 ' + fmt(m.held) + ' IP 처리 대기</div>' : '<div class="muted">' + fmt(r) + ' IP = 티켓 1장</div>') + '</div>' +
     '<div class="card"><div>교환 가능한 티켓</div><div class="metric">' + fmt(Math.floor(avail / r)) + ' <small>장</small></div>' +
-    '<div class="muted">' + fmt(r) + ' IP = 티켓 1장 · 1회 최대 ' + fmt(s.max) + '장</div></div></div>';
+    '<div class="muted">1회 최대 ' + fmt(s.max) + '장</div></div>' +
+    '<div class="card fulpot"><div>풀팟 계정 보유 티켓<span class="tag">모의</span></div><div class="metric">' + fmt(m.fpTickets) + ' <small>장</small>' +
+    (g ? '<span class="bump">+' + fmt(g) + '</span>' : '') + '</div>' +
+    '<div class="muted">' + (m.fp && m.fpNick ? esc(m.fp) + ' · ' + esc(m.fpNick) : '풀팟 계정 미등록') + '</div></div></div>';
+  gain = null;
 
   h += '<div class="card"><h2>' + esc(s.ticket) + ' 교환</h2>' +
-    '<p class="muted">받을 계정: <b>' + (m.fp && m.fpNick ? esc(m.fp) + ' / ' + esc(m.fpNick) : '미등록') + '</b></p>' +
+    '<p class="muted">받을 계정: <b>' + (m.fp && m.fpNick ? esc(m.fp) + ' / ' + esc(m.fpNick) : '미등록') + '</b>' +
+    (s.fulpotMode !== 'ok' ? ' · <span class="pill wait">모의 풀팟: ' + MODE_TEXT[s.fulpotMode] + '</span>' : '') + '</p>' +
     (s.notice ? '<div class="alert">' + esc(s.notice) + '</div>' : '') +
     '<label for="qty">티켓 장수</label>' +
     '<input id="qty" type="number" min="1" max="' + Math.max(1, mq) + '" value="1" oninput="updateCost()" ' + (reason ? 'disabled' : '') + '>' +
     '<p class="muted" id="costLine"></p>' +
-    '<button onclick="exchange()" ' + (reason ? 'disabled' : '') + '>티켓 교환 (체험)</button>' +
-    (reason ? '<p class="muted">' + esc(reason) + '</p>' : '<p class="muted">신청 즉시 IP가 차감되고 체험 지급 완료로 기록됩니다. 실제 게임 지급은 연동되어 있지 않습니다.</p>') +
+    '<button id="exBtn" onclick="exchange()" ' + (reason ? 'disabled' : '') + '>티켓 교환 신청</button>' +
+    (reason ? '<p class="muted">' + esc(reason) + '</p>' : '<p class="muted">신청하면 IP가 차감되고 풀팟에 지급을 요청합니다. (체험판은 모의 풀팟 서버가 응답합니다)</p>') +
     '</div>';
+
+  h += '<div class="card"><h2>교환 신청 내역</h2><ul class="list">' + (mine.slice(0, 20).map(x =>
+    '<li><b>' + esc(x.no) + '</b> · 티켓 ' + fmt(x.qty) + '장 · ' + fmt(x.cost) + ' IP <span class="pill ' + statusClass(x.status) + '">' + esc(x.status) + '</span>' +
+    '<div class="muted">' + esc(x.date) + ' · ' + esc(x.fp) + ' / ' + esc(x.nick) +
+    (x.status === '지급 완료' ? ' · 풀팟 지급번호 ' + esc(x.payNo) : x.status === '실패' ? ' · ' + esc(x.reason || '지급 실패') + ' · IP 환불됨' : ' · 풀팟 지급 결과 확인 중') +
+    '</div></li>').join('') || '<li class="muted">교환 신청이 없습니다.</li>') + '</ul></div>';
 
   h += '<div class="card"><h2>풀팟 계정 ' + (m.fp && m.fpNick ? '변경' : '등록') + '</h2>' +
     '<p class="muted">티켓은 여기 등록한 풀팟 계정으로만 지급됩니다.</p>' +
@@ -174,19 +247,11 @@ function memberView(m) {
     '<label for="nick">닉네임</label><input id="nick" maxlength="80" value="' + esc(m.fpNick || '') + '" placeholder="풀팟 닉네임" ' + (stopped ? 'disabled' : '') + '>' +
     '<button type="submit" class="secondary" ' + (stopped ? 'disabled' : '') + '>저장</button></form></div>';
 
-  h += '<div class="card"><h2>내역</h2><ul class="list">' + historyList(m.id) + '</ul></div>';
+  h += '<div class="card"><h2>포인트 내역</h2><ul class="list">' + historyList(m.id) + '</ul></div>';
 
-  h += '<details class="card"><summary>체험용 테스트 시나리오</summary>' +
-    '<p class="muted">상황을 고르면 지금 로그인한 회원의 체험 데이터가 그 상태로 바뀝니다. 교환 비율·최대 장수·교환 열림 설정도 기본값(' + DEFAULTS.ratio + ' IP, ' + DEFAULTS.max + '장, 열림)으로 돌아갑니다.</p>' +
-    '<div class="sample">' + [
-      ['normal', '정상 교환 가능', '120 IP · 계정 등록'],
-      ['empty', '포인트 부족', '10 IP'],
-      ['unregistered', '풀팟 계정 미등록', '120 IP'],
-      ['maximum', '다량 보유', '400 IP · 1회 최대 장수 확인'],
-      ['closed', '교환 일시 중지', '관리자 설정 닫힘'],
-      ['history', '교환 완료 내역', '1장 교환 기록']
-    ].map(([k, t, d]) => '<button type="button" class="secondary" onclick="scenario(\'' + k + '\')">' + t + '<span>' + d + '</span></button>').join('') +
-    '</div></details>';
+  h += '<details class="card"><summary>다른 시나리오로 바꾸기</summary>' +
+    '<p class="muted">지금 로그인한 회원의 체험 데이터가 고른 상태로 바뀝니다. 교환 비율·최대 장수·교환 열림·모의 풀팟 응답도 그 시나리오에 맞게 바뀝니다.</p>' +
+    scenarioButtons('scenario') + '</details>';
 
   h += '<button class="secondary" onclick="logout()">로그아웃</button>';
   return h;
@@ -212,10 +277,10 @@ function updateCost() {
   const n = Number(q.value), mq = maxQty(m);
   if (!Number.isInteger(n) || n < 1) el.innerHTML = '1장 이상 입력해 주세요.';
   else if (n > mq) el.innerHTML = '최대 ' + fmt(mq) + '장까지 교환할 수 있습니다.';
-  else el.innerHTML = '차감 예정 <span class="cost">' + fmt(n * ratio()) + ' IP</span> · 교환 후 ' + fmt(available(m) - n * ratio()) + ' IP';
+  else el.innerHTML = '차감 예정 <span class="cost">' + fmt(n * ratio()) + ' IP</span> · 교환 후 ' + fmt(available(m) - n * ratio()) + ' IP · 풀팟 티켓 ' + fmt(m.fpTickets) + ' → ' + fmt(m.fpTickets + n) + '장';
 }
 
-/* ───── 동작 ───── */
+/* ───── 로그인 ───── */
 function startSession(m, text) {
   uid = m.id;
   sessionStorage.setItem(SESSION_KEY, uid);
@@ -232,11 +297,14 @@ function login(e) {
   if (!m) return msg('일치하는 회원이 없습니다. 이름과 휴대폰 번호를 확인해 주세요.', 'error');
   startSession(m, m.name + '님, 로그인했습니다.');
 }
-function loginAs(id) {
+function loginScenario(k) {
   fresh();
-  const m = user(id);
-  if (!m) return msg('체험 회원을 찾을 수 없습니다.', 'error');
-  startSession(m, m.name + '님(체험 회원)으로 로그인했습니다.');
+  let m = user('U-1024');
+  if (!m) { m = { ...EXAMPLES[0], held: 0, status: '정상', fpTickets: 0 }; db.users.unshift(m); }
+  applyScenario(m, k);
+  save();
+  const s = SCENARIOS.find(x => x.k === k);
+  startSession(m, '"' + s.t + '" 시나리오로 로그인했습니다.');
 }
 function logout() {
   uid = '';
@@ -245,15 +313,11 @@ function logout() {
   view();
 }
 
-function scenario(k) {
-  fresh();
-  const m = user(uid);
-  if (!m) return view();
+/* ───── 시나리오 ───── */
+function applyScenario(m, k) {
   const ex = EXAMPLES.find(x => x.id === m.id) || EXAMPLES[0];
-  Object.assign(db.settings, { opened: true, ratio: DEFAULTS.ratio, max: DEFAULTS.max });
-  m.held = 0;
-  m.ip = 120;
-  m.status = '정상';
+  Object.assign(db.settings, { opened: true, ratio: DEFAULTS.ratio, max: DEFAULTS.max, fulpotMode: 'ok' });
+  Object.assign(m, { held: 0, ip: 120, status: '정상', fpTickets: 0 });
   m.fp = ex.fp || 'FP-' + m.id.replace(/\D/g, '').padStart(5, '0');
   m.fpNick = ex.fpNick || m.name;
   db.requests = db.requests.filter(r => r.id !== m.id);
@@ -262,18 +326,28 @@ function scenario(k) {
   if (k === 'unregistered') { m.fp = ''; m.fpNick = ''; }
   if (k === 'maximum') m.ip = 400;
   if (k === 'closed') db.settings.opened = false;
+  if (k === 'suspended') m.status = '이용 중지';
+  if (k === 'delay' || k === 'reject') db.settings.fulpotMode = k;
   if (k === 'history') {
     m.ip = 80;
+    m.fpTickets = 1;
     const no = 'REQ-' + String(db.seq++).padStart(5, '0');
-    db.requests.push({ no, id: m.id, qty: 1, fp: m.fp, nick: m.fpNick, cost: DEFAULTS.ratio, status: '체험 지급 완료', date: now(), payNo: 'DEMO-' + no });
-    log('티켓 체험 즉시 교환', m.id, -DEFAULTS.ratio, m.fp + ' / ' + m.fpNick + ' · 1장 (실제 미지급)');
+    db.requests.push({ no, id: m.id, qty: 1, fp: m.fp, nick: m.fpNick, cost: DEFAULTS.ratio, status: '지급 완료', date: now(), ts: Date.now(), payNo: txNo() });
+    log('티켓 교환', m.id, -DEFAULTS.ratio, no + ' · 1장 → ' + m.fp);
   }
+}
+function scenario(k) {
+  fresh();
+  const m = user(uid);
+  if (!m) return view();
+  applyScenario(m, k);
   save();
-  msg('테스트 시나리오를 적용했습니다.');
+  msg('"' + SCENARIOS.find(x => x.k === k).t + '" 시나리오를 적용했습니다.');
   view();
   window.scrollTo(0, 0);
 }
 
+/* ───── 풀팟 계정 ───── */
 function registerFp(e) {
   e.preventDefault();
   const fp = $('fp').value.trim(), nick = $('nick').value.trim();
@@ -285,6 +359,7 @@ function registerFp(e) {
   if (fp.length > 80 || nick.length > 80) return msg('계정 정보는 80자 이내로 입력해 주세요.', 'error');
   if (m.fp === fp && m.fpNick === nick) return msg('바뀐 내용이 없습니다.');
   const changed = !!(m.fp && m.fpNick);
+  if (changed && m.fp !== fp) m.fpTickets = 0;   // 다른 풀팟 계정이면 보유 티켓은 그 계정 기준
   m.fp = fp;
   m.fpNick = nick;
   log(changed ? '풀팟 계정 변경' : '풀팟 계정 등록', m.id, 0, fp + ' / ' + nick);
@@ -293,7 +368,20 @@ function registerFp(e) {
   view();
 }
 
-function exchange() {
+/* ───── 티켓 교환 (모의 풀팟 지급) ───── */
+let busy = false;
+function flowView(title, sub, steps, result) {
+  $('flow').innerHTML = '<div class="overlay" role="dialog" aria-modal="true" aria-label="티켓 지급 진행"><div class="modal">' +
+    '<h2>' + esc(title) + '</h2><div class="muted">' + esc(sub) + '</div><ol class="steps">' +
+    steps.map((s, i) => '<li class="' + s.state + '"><span class="ic">' + (s.state === 'done' ? '✓' : s.state === 'fail' ? '✕' : s.state === 'warn' ? '!' : i + 1) +
+      '</span><div><b>' + esc(s.t) + '</b>' + (s.d ? '<small>' + esc(s.d) + '</small>' : '') + '</div></li>').join('') + '</ol>' +
+    (result ? '<div class="result ' + result.kind + '">' + result.html + '</div><button style="width:100%" onclick="closeFlow()">확인</button>' : '') +
+    '</div></div>';
+}
+function closeFlow() { $('flow').innerHTML = ''; busy = false; view(); window.scrollTo(0, 0); }
+
+async function exchange() {
+  if (busy) return;
   const n = Number($('qty').value);
   fresh();
   const m = user(uid);
@@ -304,32 +392,86 @@ function exchange() {
   if (!Number.isInteger(n) || n < 1) return msg('티켓 장수는 1장 이상 정수로 입력해 주세요.', 'error');
   if (n > (db.settings.max || DEFAULTS.max)) return msg('한 번에 최대 ' + fmt(db.settings.max) + '장까지 교환할 수 있습니다.', 'error');
   if (n > mq) return msg('포인트가 부족합니다. 지금은 최대 ' + fmt(mq) + '장까지 교환할 수 있습니다.', 'error');
-  if (!confirm(m.fp + ' (' + m.fpNick + ') 계정으로 티켓 ' + n + '장을 교환할까요?\n' + fmt(cost) + ' IP가 차감됩니다.\n\n※ 실제 풀팟 서버에는 지급되지 않는 체험 처리입니다.')) return;
-  m.ip -= cost;
+  if (!confirm(m.fp + ' (' + m.fpNick + ') 계정으로 티켓 ' + n + '장을 교환할까요?\n' + fmt(cost) + ' IP가 차감됩니다.\n\n※ 체험판: 모의 풀팟 서버가 지급을 처리합니다.')) return;
+  busy = true;
+
+  // 1) 신청 접수 · IP 차감 (바로 저장해서 관리자 화면에도 '처리 중'으로 보이게 함)
+  const mode = db.settings.fulpotMode || 'ok';
   const no = 'REQ-' + String(db.seq++).padStart(5, '0');
-  db.requests.push({ no, id: m.id, qty: n, fp: m.fp, nick: m.fpNick, cost, status: '체험 지급 완료', date: now(), payNo: 'DEMO-' + no });
-  log('티켓 체험 즉시 교환', m.id, -cost, m.fp + ' / ' + m.fpNick + ' · ' + n + '장 (실제 미지급)');
+  const fp = m.fp, nick = m.fpNick, before = m.fpTickets, ipBefore = m.ip;
+  m.ip -= cost;
+  db.requests.push({ no, id: m.id, qty: n, fp, nick, cost, status: '처리 중', date: now(), ts: Date.now() });
+  log('티켓 교환', m.id, -cost, no + ' · ' + n + '장 → ' + fp);
   save();
-  msg('티켓 ' + n + '장 체험 교환이 완료되었습니다. (신청번호 ' + no + ' · 실제 풀팟 티켓은 지급되지 않음)');
-  view();
-  window.scrollTo(0, 0);
+
+  const steps = [
+    { t: '신청 접수 · IP 차감', d: fmt(ipBefore) + ' → ' + fmt(ipBefore - cost) + ' IP (−' + fmt(cost) + ')', state: 'run' },
+    { t: '풀팟 서버에 지급 요청', d: fp + ' / ' + nick + ' · 티켓 ' + n + '장', state: '' },
+    { t: '풀팟 지급 결과 확인', d: '', state: '' },
+    { t: '풀팟 계정에 티켓 반영', d: '', state: '' }
+  ];
+  const title = '티켓 ' + n + '장 지급 진행', sub = '신청번호 ' + no;
+  flowView(title, sub, steps);
+  await sleep(700); steps[0].state = 'done'; steps[1].state = 'run'; flowView(title, sub, steps);
+  await sleep(900); steps[1].state = 'done'; steps[1].d += ' · 요청 전송됨'; steps[2].state = 'run'; steps[2].d = '응답 기다리는 중…'; flowView(title, sub, steps);
+
+  let result, pay = '';
+  if (mode === 'delay') {
+    await sleep(3200);
+    steps[2].state = 'warn'; steps[2].d = '응답 시간 초과 · 지급 여부를 알 수 없음';
+    steps[3].state = 'skip'; steps[3].d = '관리자가 풀팟에서 지급을 확인하면 반영됩니다';
+    result = { kind: 'warn', html: '<b>지급 확인 중</b><br>풀팟 서버가 응답하지 않아 <b>확인 필요</b>로 접수했습니다. 차감한 ' + fmt(cost) + ' IP는 관리자 확인 결과에 따라 지급 완료되거나 환불됩니다.' };
+  } else if (mode === 'reject') {
+    await sleep(1100);
+    steps[2].state = 'fail'; steps[2].d = '지급 거절 · 풀팟 계정 상태 확인 필요 (모의 거절)';
+    steps[3].t = 'IP 환불'; steps[3].state = 'run'; steps[3].d = '차감한 포인트를 돌려주는 중…';
+    flowView(title, sub, steps);
+    await sleep(800);
+    steps[3].state = 'done'; steps[3].d = '+' + fmt(cost) + ' IP 환불 완료';
+    result = { kind: 'fail', html: '<b>지급 실패 · 환불 완료</b><br>풀팟에서 지급을 거절해 ' + fmt(cost) + ' IP를 돌려드렸습니다. 풀팟 계정 상태를 확인한 뒤 다시 신청해 주세요.' };
+  } else {
+    await sleep(900);
+    pay = txNo();
+    steps[2].state = 'done'; steps[2].d = '지급 승인 · 풀팟 지급번호 ' + pay;
+    steps[3].state = 'run'; steps[3].d = '계정에 티켓 넣는 중…';
+    flowView(title, sub, steps);
+    await sleep(700);
+    steps[3].state = 'done'; steps[3].d = '보유 티켓 ' + fmt(before) + '장 → ' + fmt(before + n) + '장';
+    result = { kind: 'ok', html: '<b>지급 완료</b><br>' + esc(fp) + ' (' + esc(nick) + ') 계정에 티켓 ' + fmt(n) + '장이 들어갔습니다.<br><small>풀팟 지급번호 ' + pay + ' · 체험판 모의 지급</small>' };
+  }
+
+  // 2) 결과 저장 (그사이 관리자 화면에서 바뀐 내용을 살리도록 다시 읽고 반영)
+  fresh();
+  const req = db.requests.find(x => x.no === no), mm = user(uid);
+  if (req && req.status === '처리 중' && mm) {
+    if (mode === 'delay') req.status = '확인 필요';
+    else if (mode === 'reject') {
+      req.status = '실패'; req.reason = '풀팟 지급 거절 (모의)';
+      mm.ip += cost;
+      log('티켓 지급 실패·환불', mm.id, cost, no + ' · 풀팟 지급 거절');
+    } else {
+      req.status = '지급 완료'; req.payNo = pay;
+      mm.fpTickets = (mm.fpTickets || 0) + n;
+      gain = { id: mm.id, n };
+    }
+    save();
+  }
+  flowView(title, sub, steps, result);
 }
 
-// 관리자 화면에서 포인트·설정을 바꾸면 이 화면도 바로 갱신합니다(입력 중이면 입력이 끝난 뒤).
+// 관리자 화면에서 포인트·설정·지급 확인을 바꾸면 이 화면도 바로 갱신합니다(입력 중이면 입력이 끝난 뒤).
 let pending = false;
+const typing = () => { const a = document.activeElement; return a && /INPUT|TEXTAREA|SELECT/.test(a.tagName); };
 window.addEventListener('storage', e => {
   if (e.key !== KEY) return;
+  const m0 = user(uid), t0 = m0 ? m0.fpTickets : 0;
   fresh();
-  const a = document.activeElement;
-  if (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName)) { pending = true; return; }
+  const m1 = user(uid);
+  if (m0 && m1 && m1.fpTickets > t0) gain = { id: m1.id, n: m1.fpTickets - t0 };
+  if (busy || typing()) { pending = true; return; }
   view();
 });
-document.addEventListener('focusout', () => {
-  setTimeout(() => {
-    const a = document.activeElement;
-    if (pending && !(a && /INPUT|TEXTAREA|SELECT/.test(a.tagName))) { pending = false; view(); }
-  }, 0);
-});
+document.addEventListener('focusout', () => setTimeout(() => { if (pending && !busy && !typing()) { pending = false; view(); } }, 0));
 
 view();
 </script>
