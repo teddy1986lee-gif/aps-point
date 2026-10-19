@@ -1,6 +1,7 @@
 'use strict';
 /*
- * 브라우저 데모 한 장짜리 HTML 만들기:  npm run build:demo  →  dist/aps-web-demo.html (+ GitHub Pages용 index.html)
+ * 브라우저 데모 한 장짜리 HTML 만들기:  npm run build:demo  →  dist/aps-web-demo.html
+ * (저장소 맨 위 index.html·admin.html은 GitHub Pages 체험판이라 덮어쓰지 않는다.)
  * 서버 코드(server/)를 그대로 묶고, DB는 sql.js, 암호 함수는 demo/crypto-browser.js로 바꿔 끼운다.
  */
 const fs = require('node:fs');
@@ -80,6 +81,4 @@ const page = read('demo/shell.html')
 fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
 const outFile = path.join(ROOT, 'dist', 'aps-web-demo.html');
 fs.writeFileSync(outFile, page);
-// GitHub Pages에서 저장소 주소로 바로 열리도록 맨 위 index.html에도 같은 내용을 둔다.
-fs.writeFileSync(path.join(ROOT, 'index.html'), page);
-console.log(`dist/aps-web-demo.html, index.html (${(page.length / 1024).toFixed(0)}KB) · 서버 모듈 ${core.modules.length}개 포함`);
+console.log(`dist/aps-web-demo.html (${(page.length / 1024).toFixed(0)}KB) · 서버 모듈 ${core.modules.length}개 포함`);
